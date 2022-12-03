@@ -1,6 +1,7 @@
 
 use std::fs::File;
 use std::io::prelude::*;
+use std::ops::Index;
 use std::path::Path;
 
 fn main() {
@@ -14,7 +15,7 @@ fn main() {
     let mut s = String::new();
     match file.read_to_string(&mut s) {
         Err(why)=> panic!("could read {}: {}",display,why),
-        Ok(_)=> print!("contains:\n" ),
+        Ok(_)=> print!("contains:\n{}",s ),
     }
 
 
@@ -24,18 +25,51 @@ fn main() {
     println!();
     println!();
 
-    let mut total_value =0;
-    for cont in contents{
-        println!("{}",cont);
-        let container1 = get_first_half(cont);
-        let container2 = get_second_half(cont);
-        total_value = total_value + get_matching_data(&container1, &container2);
+    // let mut total_value =0;
+    // for cont in contents{
+    //     println!("{}",cont);
+    //     let container1 = get_first_half(cont);
+    //     let container2 = get_second_half(cont);
+    //     total_value = total_value + get_matching_data(&container1, &container2);
 
+    //     println!();
+    // }
+
+    // println!("total value {}",total_value);
+
+    let mut i =0;
+    let mut valsum = 0;
+    while i < contents.len(){
+        let s = contents.index(i);
+
+        println!("{}",s);
+        let s2 = contents.index(i+1);
+        println!("{}",s2);
+
+        let s3 = contents.index(i+2);
+        println!("{}",s3);
+
+        valsum = valsum + get_common_item(s, &s2, &s3);
+        i = i+3;
         println!();
     }
+    println!("the sum of the vals is {}",valsum);
 
-    println!("total value {}",total_value);
+
 }
+
+fn get_common_item(bag1:&str,bag2:&str,bag3:&str) -> i32{
+    let mut val = 0;
+    for ch in bag1.chars(){
+        if bag2.contains(ch) && bag3.contains(ch){
+            println!("found matching item {}", ch);
+            val = get_value(ch);
+        }
+    }
+    return val;
+}
+
+
 
 fn get_first_half(target: &str ) -> String{
     let mut items = String::new();
